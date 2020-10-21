@@ -5,7 +5,7 @@ public class Theater {
 
     private final String theaterName;
     // using collections lets us use any of the Collections classes
-    private List<Seat> seats = new ArrayList<>();
+    public static List<Seat> seats = new ArrayList<>();
 
     public Theater(String theaterName, int numRows, int seatsPerRow) {
         this.theaterName = theaterName;
@@ -26,7 +26,22 @@ public class Theater {
         return theaterName;
     }
 
-    public boolean reserveSeat(String seatNumber) {
+    public static boolean reserveSeat(String seatNumber) {
+        // reason binary search is fastest way to find an
+        // item in a sorted list. It works by checking the element
+        // in the midpoint of the list. So the method plays
+        // higher or lower with the list. So if middle item
+        // is higher than the item we're looking for, it knows
+        // the one we want must be in the first part of the list.
+        // So the list is reduced to half each time.
+        // will take no more than 10 checks to find an item, or
+        // decide its not present in a list of 1024
+        // over a million items, 1,048,576 can be checked in
+        // no more than 20 comparisons
+        // and 64 comparisons are all that's required to search
+        // a list with a huge number.
+        //
+        // comparing seats
 
             int low = 0;
             int high = seats.size()-1;
@@ -46,16 +61,39 @@ public class Theater {
             System.out.println("There is no seat" + seatNumber);
             return false;
         }
+//        Seat requestedSeat = new Seat(seatNumber);
+//        int foundSeat = Collections.binarySearch(seats, requestedSeat, null);
+//        if (foundSeat >= 0) {
+//            return seats.get(foundSeat).reserve();
+//        } else {
+//            System.out.println("There is no seat " + seatNumber);
+//            return false;
+//        }
+//        }
+//        for (Seat seat : seats) {
+//            System.out.print(".");
+//            if (seat.getSeatNumber().equals(seatNumber)) {
+//                requestedSeat = seat;
+//                break;
+//            }
+//        }
+//
+//        if(requestedSeat == null) {
+//            System.out.println("There is no seat " + seatNumber);
+//            return false;
+//        }
+//
+//        return requestedSeat.reserve();
 
     // for testing
-    public boolean getSeat() {
+    public static boolean getSeat() {
         for(Seat seat : seats) {
             System.out.println(seat.getSeatNumber());
         }
         return false;
     }
     // using comparable makes it a lot more efficient
-    private class Seat implements Comparable<Seat>{
+    class Seat implements Comparable<Seat>{
         private final String seatNumber;
         private boolean reserved = false;
 
